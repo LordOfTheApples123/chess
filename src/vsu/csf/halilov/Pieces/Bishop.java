@@ -13,15 +13,19 @@ public class Bishop extends Piece {
     }
 
     public static boolean isDiag(Square pos1, Square pos2) {
+        if(pos2.row == pos1.row){
+            return false;
+        }
         return abs(pos2.col - pos1.col) % (pos2.row - pos1.row) == 0;
     }
 
 
     public static Set<Square> getDiagMoves(Square[][] board, Square square) {
+        PColor color = square.getPieceColor();
         Set<Square> res = new HashSet<>();
         int row = square.row + 1;
         int col = square.col + 1;
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -32,7 +36,7 @@ public class Bishop extends Piece {
         row = square.row + 1;
         col = square.col - 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -44,7 +48,7 @@ public class Bishop extends Piece {
         row = square.row - 1;
         col = square.col + 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -56,7 +60,7 @@ public class Bishop extends Piece {
         row = square.row - 1;
         col = square.col - 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;

@@ -21,4 +21,13 @@ public enum PColor {
             return "Black";
         } else return null;
     }
+
+    public static String to1LetterString( PColor color){
+        if (color == WHITE) {
+            return "W";
+        }
+        if (color == BLACK) {
+            return "B";
+        } else return " ";
+    }
 }

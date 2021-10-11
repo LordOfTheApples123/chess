@@ -30,6 +30,13 @@ public class Square {
         this.piece = piece;
     }
 
+    public String getPieceId(){
+        if(piece == null){
+            return "Null";
+        }
+        return piece.getPieceId();
+    }
+
     public Square(int row, int col, Color squareColor) {
         this.row = row;
         this.col = col;
@@ -56,10 +63,16 @@ public class Square {
     }
 
     public PColor getPieceColor() {
+        if(piece == null){
+            return null;
+        }
         return piece.getColor();
     }
 
     public String getId() {
+        if(piece == null){
+            return " ";
+        }
         return piece.getPieceId();
     }
 
@@ -85,7 +98,7 @@ public class Square {
         int lowerRow = startingSquare.row;
         int higherRow = targetSquare.row;
 
-        int lowerCol = startingSquare.row;
+        int lowerCol = startingSquare.col;
         int higherCol = targetSquare.col;
 
         if(Bishop.isDiag(startingSquare, targetSquare)){
@@ -100,7 +113,7 @@ public class Square {
 
             for(int i = lowerRow; i < higherRow; i++){
                 for(int j = lowerCol; j!=higherCol; j+=delta) {
-                    res.add(board[i][delta]);
+                    res.add(board[i][j]);
                 }
             }
         }

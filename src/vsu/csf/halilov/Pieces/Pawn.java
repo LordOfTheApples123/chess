@@ -19,17 +19,24 @@ public class Pawn extends Piece {
         int pieceCol = piecePos.col;
         int row = pos.row;
         int col = pos.col;
-
-        return board[row + delta][col].piece == null;
+        if(row == pieceRow + delta && col == pieceCol){
+            return board[row][col].getPiece() == null;
+        }
+        return isCapture(board, piecePos, pos);
     }
 
-    private boolean isCapture(Piece[][] board, Square piecePos, Square pos) {
+    public boolean isCapture(Square[][] board, Square piecePos, Square pos){
         int pieceRow = piecePos.row;
         int pieceCol = piecePos.col;
         int row = pos.row;
-        int col = pos.row;
-        return row == pieceRow + 1 && Math.abs(pieceCol - col) == 1 && board[pos.row][pos.col].color != this.color;
+        int col = pos.col;
+
+        return row == pieceRow + delta && Math.abs(pos.col - pieceCol) == 1 && board[row][col].getPieceColor() == piecePos.getPieceColor().getOpos();
     }
+
+
+
+
 
     //TODO pawn promotion
     //TODO pawn first move

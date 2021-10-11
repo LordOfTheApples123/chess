@@ -34,9 +34,8 @@ public class Knight extends Piece {
     public static Set<Square> getKnightMoves(Square[][] board, Square pos) {
         Set<Square> res = new HashSet<>();
         for (Square moves : KNIGHT_POSSIBLE_MOVES) {
-            Square curr = board[pos.row + moves.row][pos.col + moves.col];
-            if (isSquareInBounds(curr)) {
-                res.add(curr);
+            if (isCoordInBounds(pos.row + moves.row, pos.col + moves.col)) {
+                res.add(board[pos.row + moves.row][pos.col + moves.col]);
             }
         }
         return res;

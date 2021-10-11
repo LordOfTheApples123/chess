@@ -35,6 +35,6 @@ public class ChessUtils {
     }
 
     public static int idToCol(String pos) {
-        return Integer.parseInt(pos.substring(1, 2));
+        return Integer.parseInt(pos.substring(1, 2)) - 1;
     }
 }

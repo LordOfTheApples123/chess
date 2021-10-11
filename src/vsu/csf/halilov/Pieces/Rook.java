@@ -11,11 +11,12 @@ public class Rook extends Piece {
     }
 
     public static Set<Square> getLineMoves(Square[][] board, Square square) {
+        PColor color = square.getPieceColor();
         int row = square.row + 1;
         int col = square.col;
 
         Set<Square> res = new HashSet<>();
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -25,7 +26,7 @@ public class Rook extends Piece {
 
         row = square.row - 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while ( isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -36,7 +37,7 @@ public class Rook extends Piece {
         row = square.row;
         col = square.col + 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
@@ -46,7 +47,7 @@ public class Rook extends Piece {
 
         col = square.col - 1;
 
-        while (isSquareAccessible(board, square, board[row][col])) {
+        while (isCoordInBounds(row, col) && board[row][col].getPieceColor() != color) {
             res.add(board[row][col]);
             if (board[row][col].piece != null) {
                 break;
