@@ -13,19 +13,22 @@ public class ConsoleInterface {
         return in.nextLine();
     }
 
-    public static void inputHandling(){
+    public static String inputHandling(){
         String input = input();
         while(!isInputCorrect(input().toCharArray())){
             System.out.println("Incorrect input try again: ");
             input = input();
         }
 
-        Square startingSquare =
+        return input;
     }
 
-    private static void incorrectInputHandling() {
-        System.out.println("Incorrect move. Try again");
-        inputHandling();
+    public static Square getTargetSquareFromString(String input) {
+        String id = input.substring(3, 5);
+        int row = ChessUtils.idToRow(id);
+
+        int col = ChessUtils.idToCol(id);
+        return new Square(row, col);
     }
 
     public static boolean isInputCorrect(char[] input){
@@ -48,7 +51,7 @@ public class ConsoleInterface {
 
     }
 
-    public Square getStartingSquareFromString(String input){
+    public static Square getStartingSquareFromString(String input){
         String id = input.substring(0, 2);
         int row = ChessUtils.idToRow(id);
 

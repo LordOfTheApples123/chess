@@ -90,8 +90,14 @@ public class King extends Piece {
                 return square;
             }
         }
-        if(board[kingSquare.row+1][kingSquare.col-1].piece.pieceId.equals("P")){
-            return board[kingSquare.row+1][kingSquare.col-1]
+        for(Square square: Knight.getKnightMoves(board, kingSquare)){
+            if(square.piece.pieceId.equals("N")){
+                return square;
+            }
         }
+        if(board[kingSquare.row+1][kingSquare.col-1].piece.pieceId.equals("P")){
+            return board[kingSquare.row+1][kingSquare.col-1];
+        }
+        return null;
     }
 }

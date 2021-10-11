@@ -1,7 +1,9 @@
 package vsu.csf.halilov.enums;
 
 public enum GameState {
-    NOT_STARTED,
+    NOT_PlAYING,
     PLAYING,
-    CHECKED
+    CHECKED,
+    MATE
+
 }

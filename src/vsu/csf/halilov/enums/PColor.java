@@ -12,4 +12,13 @@ public enum PColor {
             return WHITE;
         } else return null;
     }
+
+    public String toString(){
+        if (this == WHITE) {
+            return "White";
+        }
+        if (this == BLACK) {
+            return "Black";
+        } else return null;
+    }
 }
