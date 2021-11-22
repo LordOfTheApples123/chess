@@ -25,8 +25,20 @@ public class Chess {
 
     public Chess() {
         initializeBoard(board);
-        this.gamestate = GameState.NOT_PlAYING;
+        this.gamestate = GameState.PLAYING;
         this.checked = null;
+        currPlayer = PColor.WHITE;
+    }
+
+    public Chess init(){
+        Chess chess= new Chess();
+        chess.gamestate = GameState.PLAYING;
+        chess.currPlayer = PColor.WHITE;
+        return chess;
+    }
+
+    public void nextMove(Square[][] board, Square startingSquare, Square targetSquare){
+
     }
 
     public void game() {
