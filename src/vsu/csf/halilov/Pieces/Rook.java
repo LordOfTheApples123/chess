@@ -62,4 +62,6 @@ public class Rook extends Piece {
     public boolean isMovePossible(Square[][] board, Square piecePos, Square pos) {
         return getLineMoves(board, piecePos).contains(pos);
     }
+
+
 }

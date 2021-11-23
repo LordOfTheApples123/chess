@@ -147,7 +147,7 @@ public class Square {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Square square = (Square) o;
-        return row == square.row && col == square.col && piece.equals(square.piece);
+        return row == square.row && col == square.col;
     }
 
     @Override

@@ -34,4 +34,47 @@ public enum EnumPiece {
             default -> null;
         };
     }
+
+    public static EnumPiece pieceToEnum(Piece piece){
+        if(piece == null){
+            return NONE;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("P")){
+            return WHITE_PAWN;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("N")){
+            return WHITE_KNIGHT;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("B")){
+            return WHITE_BISHOP;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("Q")){
+            return WHITE_QUEEN;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("K")){
+            return WHITE_KING;
+        }
+        if(piece.getColor() == PColor.WHITE && piece.getPieceId().equals("R")){
+            return WHITE_ROOK;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("P")){
+            return BLACK_PAWN;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("N")){
+            return BLACK_KNIGHT;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("B")){
+            return BLACK_BISHOP;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("Q")){
+            return BLACK_QUEEN;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("K")){
+            return BLACK_KING;
+        }
+        if(piece.getColor() == PColor.BLACK && piece.getPieceId().equals("R")){
+            return BLACK_ROOK;
+        }
+        return null;
+    }
 }

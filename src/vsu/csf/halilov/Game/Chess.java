@@ -1,6 +1,7 @@
 package vsu.csf.halilov.Game;
 
 import vsu.csf.halilov.CLI.ConsoleInterface;
+import vsu.csf.halilov.GUI.ChessState;
 import vsu.csf.halilov.Pieces.*;
 import vsu.csf.halilov.enums.GameState;
 import vsu.csf.halilov.enums.PColor;
@@ -41,6 +42,13 @@ public class Chess {
 
     }
 
+    public Set<Square> getPiecePossibleMoves(Square square){
+        if(square.getPiece() == null){
+            return new HashSet<>();
+        }
+        return square.getPiece().getPossibleMoves(board, square);
+    }
+
     public void game() {
         this.gamestate = GameState.PLAYING;
         this.currPlayer = PColor.WHITE;
@@ -67,7 +75,6 @@ public class Chess {
             }
 
             move(startingSquare, targetSquare);
-            currPlayer = currPlayer.getOpos();
         }
     }
 
@@ -78,22 +85,24 @@ public class Chess {
 
 
 
-    private void move(Square startingSquare, Square targetSquare) {
+    public void move(Square startingSquare, Square targetSquare) {
 
-        if(startingSquare.getPiece().getPieceId().equals("K")){
-            kings.replace(currPlayer, targetSquare);
-        }
+
 
         Piece.move(this.board, startingSquare, targetSquare);
+        if(startingSquare.getPiece().getPieceId().equals("K")){
+            kings.replace(currPlayer, board[targetSquare.getRow()][targetSquare.getCol()]);
+        }
         if(isCheck(currPlayer.getOpos()) && isMate()){
             end();
             return;
         }
         this.checked = isCheck(currPlayer.getOpos()) ? currPlayer.getOpos() : null;
+        currPlayer = currPlayer.getOpos();
 
     }
 
-    private boolean combinedMoveChecking(Square startingSquare, Square targetSquare){
+    public boolean combinedMoveChecking(Square startingSquare, Square targetSquare){
         return isMoveCorrect(startingSquare, targetSquare) &&
                 isMoveLegal(startingSquare, targetSquare) &&
                 isMovePossible(startingSquare, targetSquare) &&
@@ -121,12 +130,14 @@ public class Chess {
         int row = startingSquare.getRow();
         int col = startingSquare.getCol();
         Square king = this.kings.get(currPlayer);
-        if(board[row][col].getPieceId().equals("K")){
-            king = targetSquare;
-        }
+
         testBoard[targetSquare.getRow()][targetSquare.getCol()].setPiece(startingSquare.getPiece());
         testBoard[startingSquare.getRow()][startingSquare.getCol()].remove();
-        return King.getCheckCount(testBoard, king) == 0;
+        if(testBoard[targetSquare.getRow()][targetSquare.getCol()].getPieceId().equals("K")){
+            king = testBoard[targetSquare.getRow()][targetSquare.getCol()];
+        }
+        int checks = King.getCheckCount(testBoard, king);
+        return checks == 0;
     }
 
     public boolean isCheck(PColor inDangerPlayer){
@@ -350,5 +361,15 @@ public class Chess {
         System.out.println(gamestate);
 
 
+    }
+
+    public PColor getCurrPlayer() {
+        return currPlayer;
+    }
+
+    public void updateChessState(ChessState chessState) {
+        chessState.setCurrCheck(checked);
+        chessState.setCurrPlayer(currPlayer);
+        chessState.setGameState(gamestate);
     }
 }
