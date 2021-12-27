@@ -25,6 +25,9 @@ public abstract class Piece {
     }
 
     public String getPieceId() {
+        if(pieceId == null){
+            return "NULL";
+        }
         return pieceId;
     }
 

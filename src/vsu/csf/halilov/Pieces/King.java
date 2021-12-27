@@ -25,8 +25,8 @@ public class King extends Piece {
     public static Set<Square> getKingMoves(Square[][] board, Square piecePos) {
         Set<Square> res = new HashSet<>();
         for (Square moves : KING_MOVES) {
-            int row = piecePos.row + moves.row;
-            int col = piecePos.col + moves.col;
+            int row = piecePos.getRow()+ moves.getRow();
+            int col = piecePos.getCol() + moves.getCol();
             if (isCoordInBounds(row, col) && board[row][col].getPieceColor() != piecePos.getPieceColor()  ) {
                 res.add(board[row][col]);
             }

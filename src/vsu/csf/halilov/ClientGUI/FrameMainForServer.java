@@ -1,4 +1,28 @@
-package vsu.csf.halilov.GUI;
+package vsu.csf.halilov.ClientGUI;
+
+import vsu.csf.halilov.CLI.ConsoleInterface;
+import vsu.csf.halilov.GUI.ChessState;
+import vsu.csf.halilov.GUI.InfoPanel;
+import vsu.csf.halilov.Game.Chess;
+import vsu.csf.halilov.Pieces.Piece;
+import vsu.csf.halilov.Pieces.Square;
+import vsu.csf.halilov.enums.EnumPiece;
+import vsu.csf.halilov.enums.GameState;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import static javax.swing.SwingUtilities.isLeftMouseButton;
 
 import vsu.csf.halilov.Game.Chess;
 import vsu.csf.halilov.Pieces.Piece;
@@ -19,13 +43,30 @@ import java.util.Set;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 
-public class FrameMain extends JFrame{
-    private static BoardPanel boardPanel = new BoardPanel();
-    private static Chess game = new Chess();
-    private static InfoPanel infoPanel = new InfoPanel();
+public class FrameMainForServer extends JFrame{
+    private BoardPanel boardPanel = new BoardPanel();
+    private Chess game = new Chess();
+    private InfoPanel infoPanel = new InfoPanel();
+    private BufferedWriter os = null;
+    private BufferedReader is = null;
 
+    public BufferedWriter getOs() {
+        return os;
+    }
 
-    public FrameMain(){
+    public void setOs(BufferedWriter os) {
+        this.os = os;
+    }
+
+    public BufferedReader getIs() {
+        return is;
+    }
+
+    public void setIs(BufferedReader is) {
+        this.is = is;
+    }
+
+    public FrameMainForServer(){
         this.setTitle("Chess");
         this.setSize(600, 800);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -59,8 +100,8 @@ public class FrameMain extends JFrame{
         infoPanel.update(new ChessState());
     }
 
-    public static class BoardPanel extends JPanel {
-        private static TilePanel[][] boardTiles = initializeStartingBoard();
+    public class BoardPanel extends JPanel {
+        private TilePanel[][] boardTiles = initializeStartingBoard();
 
 
         public BoardPanel() {
@@ -80,7 +121,7 @@ public class FrameMain extends JFrame{
             return boardTiles[row][col];
         }
 
-        private static TilePanel[][] initializeStartingBoard() {
+        private TilePanel[][] initializeStartingBoard() {
             Color brown = new Color(181, 136, 99);
             Color pale = new Color(240, 217, 181);
             TilePanel[][] board = new TilePanel[8][8];
@@ -101,7 +142,7 @@ public class FrameMain extends JFrame{
                 board[1][i].setPiece(EnumPiece.WHITE_PAWN);
             }
 
-            //black placement
+//black placement
             board[7][0].setPiece(EnumPiece.BLACK_ROOK);
             board[7][1].setPiece(EnumPiece.BLACK_KNIGHT);
             board[7][2].setPiece(EnumPiece.BLACK_BISHOP);
@@ -134,7 +175,7 @@ public class FrameMain extends JFrame{
 
         }
 
-        public static class TilePanel extends JPanel {
+        public class TilePanel extends JPanel {
             private final int row;
             private final int col;
             private Color color;
@@ -166,11 +207,11 @@ public class FrameMain extends JFrame{
                                     source = new Square(row, col, movedPiece);
                                     Set<Square> moves = game.getPiecePossibleMoves(source);
 
-                                        for (Square square : moves) {
-                                            TilePanel curr = boardTiles[square.getRow()][square.getCol()];
-                                            curr.lightUp();
-                                            curr.repaintTile();
-                                        }
+                                    for (Square square : moves) {
+                                        TilePanel curr = boardTiles[square.getRow()][square.getCol()];
+                                        curr.lightUp();
+                                        curr.repaintTile();
+                                    }
 
 
 
@@ -192,11 +233,41 @@ public class FrameMain extends JFrame{
                                     boardTiles[target.getRow()][target.getCol()].setPiece(movedEnumPiece);
                                     boardTiles[source.getRow()][source.getCol()].repaintTile();
                                     boardTiles[target.getRow()][target.getCol()].repaintTile();
+
+                                    try {
+
+                                        os.write(source.toString() + " " + target.toString());
+                                        os.newLine();
+                                        os.flush();
+
+                                        String line = is.readLine();
+
+                                        if(line.equals("Impossible move, try again: ")){
+                                            System.out.println("не работает");
+                                        }else {
+
+                                            Square startingSquareInput = ConsoleInterface.getStartingSquareFromString(line);
+                                            Square targetSquareInput = ConsoleInterface.getTargetSquareFromString(line);
+
+                                            //getting actual squares out of coords
+                                            Square startingSquare = game.getBoard(startingSquareInput.getRow(), startingSquareInput.getCol());
+                                            Square targetSquare = game.getBoard(targetSquareInput.getRow(), targetSquareInput.getCol());
+                                            EnumPiece piece = boardTiles[startingSquare.getRow()][startingSquare.getCol()].getPiece();
+                                            game.move(startingSquare, targetSquare);
+
+                                            boardTiles[startingSquare.getRow()][startingSquare.getCol()].setPiece(EnumPiece.NONE);
+                                            boardTiles[targetSquare.getRow()][targetSquare.getCol()].setPiece(piece);
+                                            boardTiles[startingSquare.getRow()][startingSquare.getCol()].repaintTile();
+                                            boardTiles[targetSquare.getRow()][targetSquare.getCol()].repaintTile();
+                                        }
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
                                     game.updateChessState(chessState);
                                     infoPanel.update(chessState);
                                 }
 
-//                                boardPanel.drawBoard(boardTiles);
+// boardPanel.drawBoard(boardTiles);
                                 moves.clear();
                                 source = null;
                                 movedEnumPiece = null;

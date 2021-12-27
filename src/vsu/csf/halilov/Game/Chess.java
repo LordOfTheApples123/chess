@@ -8,10 +8,7 @@ import vsu.csf.halilov.enums.PColor;
 import vsu.csf.halilov.utils.DebugUtils;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static vsu.csf.halilov.enums.PColor.to1LetterString;
 
@@ -29,6 +26,25 @@ public class Chess {
         this.gamestate = GameState.PLAYING;
         this.checked = null;
         currPlayer = PColor.WHITE;
+    }
+
+    public Square getBoard(int x, int y) {
+        return board[x][y];
+    }
+    public void setBoard(int x, int y, Square square) {
+        board[x][y] = square;
+    }
+
+    public GameState getGamestate() {
+        return gamestate;
+    }
+
+    public void setGamestate(GameState gamestate) {
+        this.gamestate = gamestate;
+    }
+
+    public void setCurrPlayer(PColor currPlayer) {
+        this.currPlayer = currPlayer;
     }
 
     public Chess init(){
@@ -54,7 +70,7 @@ public class Chess {
         this.currPlayer = PColor.WHITE;
         System.out.println(HELP);
         while(gamestate != GameState.MATE){
-            printBoard(board);
+            printBoard();
             String input = ConsoleInterface.inputHandling(currPlayer);
             Square startingSquareInput = ConsoleInterface.getStartingSquareFromString(input);
             Square targetSquareInput = ConsoleInterface.getTargetSquareFromString(input);
@@ -90,7 +106,7 @@ public class Chess {
 
 
         Piece.move(this.board, startingSquare, targetSquare);
-        if(startingSquare.getPiece().getPieceId().equals("K")){
+        if(startingSquare.getPieceId().equals("K")){
             kings.replace(currPlayer, board[targetSquare.getRow()][targetSquare.getCol()]);
         }
         if(isCheck(currPlayer.getOpos()) && isMate()){
@@ -100,6 +116,30 @@ public class Chess {
         this.checked = isCheck(currPlayer.getOpos()) ? currPlayer.getOpos() : null;
         currPlayer = currPlayer.getOpos();
 
+    }
+
+    public char[] randomResponse(){
+        Set<Square> res = new HashSet<>();
+        Square startingSquare = new Square(0, 0);
+        Square targetSquare = new Square(0, 0);
+        for(Square[] squareArray: this.board){
+            for(Square sq: squareArray){
+                if(sq.getPiece() != null) {
+                    if (sq.getPieceColor() == currPlayer && !sq.getPiece().getPieceId().equals("K")) {
+                        if(!getPiecePossibleMoves(sq).isEmpty()){
+                            startingSquare = sq;
+                            for(Square target: getPiecePossibleMoves(sq)){
+                                targetSquare = target;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        String resString = startingSquare.toString() + " " + targetSquare.toString();
+        move(startingSquare, targetSquare);
+        return resString.toCharArray();
     }
 
     public boolean combinedMoveChecking(Square startingSquare, Square targetSquare){
@@ -264,7 +304,7 @@ public class Chess {
         return res;
     }
 
-    private static void printBoard(Square[][] board){
+    public void printBoard(){
         for(int i = BOARD_SIZE - 1; i >= 0; i--){
             for(int j = 0; j< BOARD_SIZE; j++){
                 System.out.print(to1LetterString(board[i][j].getPieceColor()));
@@ -347,7 +387,7 @@ public class Chess {
         Square targetSquare = this.board[targetSquareInput.getRow()][targetSquareInput.getCol()];
 
         move(startingSquare, targetSquare);
-        printBoard(board);
+        printBoard();
         currPlayer = currPlayer.getOpos();
     }
 
@@ -356,7 +396,7 @@ public class Chess {
         this.gamestate = GameState.PLAYING;
         this.currPlayer = PColor.WHITE;
         DebugUtils.fenToBoard(fen, board, kings);
-        printBoard(board);
+        printBoard();
         moveForDebug("d4 e6");
         System.out.println(gamestate);
 
@@ -371,5 +411,9 @@ public class Chess {
         chessState.setCurrCheck(checked);
         chessState.setCurrPlayer(currPlayer);
         chessState.setGameState(gamestate);
+    }
+
+    public Square[][] getBoard() {
+        return board;
     }
 }

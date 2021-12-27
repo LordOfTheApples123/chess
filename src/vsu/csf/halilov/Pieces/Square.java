@@ -154,4 +154,30 @@ public class Square {
     public int hashCode() {
         return Objects.hash(row, col, piece);
     }
+
+    @Override
+    public String toString() {
+        String res = "";
+        switch(col){
+            case 0: res +="a";
+                break;
+            case 1: res +="b";
+                break;
+            case 2: res +="c";
+                break;
+            case 3: res +="d";
+                break;
+            case 4: res +="e";
+                break;
+            case 5: res +="f";
+                break;
+            case 6: res +="g";
+                break;
+            case 7: res +="h";
+                break;
+        }
+        int resCol = row+1;
+        res += resCol;
+        return res;
+    }
 }
