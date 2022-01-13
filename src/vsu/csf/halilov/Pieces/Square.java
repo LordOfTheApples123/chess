@@ -30,6 +30,13 @@ public class Square {
         this.piece = piece;
     }
 
+    public String getPieceId(){
+        if(piece == null){
+            return "Null";
+        }
+        return piece.getPieceId();
+    }
+
     public Square(int row, int col, Color squareColor) {
         this.row = row;
         this.col = col;
@@ -56,10 +63,16 @@ public class Square {
     }
 
     public PColor getPieceColor() {
+        if(piece == null){
+            return null;
+        }
         return piece.getColor();
     }
 
     public String getId() {
+        if(piece == null){
+            return " ";
+        }
         return piece.getPieceId();
     }
 
@@ -85,7 +98,7 @@ public class Square {
         int lowerRow = startingSquare.row;
         int higherRow = targetSquare.row;
 
-        int lowerCol = startingSquare.row;
+        int lowerCol = startingSquare.col;
         int higherCol = targetSquare.col;
 
         if(Bishop.isDiag(startingSquare, targetSquare)){
@@ -100,7 +113,7 @@ public class Square {
 
             for(int i = lowerRow; i < higherRow; i++){
                 for(int j = lowerCol; j!=higherCol; j+=delta) {
-                    res.add(board[i][delta]);
+                    res.add(board[i][j]);
                 }
             }
         }
@@ -134,11 +147,37 @@ public class Square {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Square square = (Square) o;
-        return row == square.row && col == square.col && piece.equals(square.piece);
+        return row == square.row && col == square.col;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(row, col, piece);
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        switch(col){
+            case 0: res +="a";
+                break;
+            case 1: res +="b";
+                break;
+            case 2: res +="c";
+                break;
+            case 3: res +="d";
+                break;
+            case 4: res +="e";
+                break;
+            case 5: res +="f";
+                break;
+            case 6: res +="g";
+                break;
+            case 7: res +="h";
+                break;
+        }
+        int resCol = row+1;
+        res += resCol;
+        return res;
     }
 }

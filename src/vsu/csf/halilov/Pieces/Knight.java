@@ -23,7 +23,8 @@ public class Knight extends Piece {
 
     @Override
     public boolean isMovePossible(Square[][] board, Square piecePos, Square pos) {
-        for (Square moves : getKnightMoves(board, piecePos)) {
+        Set<Square> knightMoves = getPossibleMoves(board, piecePos);
+        for (Square moves : knightMoves) {
             if (moves.equals(pos)) {
                 return true;
             }
@@ -34,12 +35,15 @@ public class Knight extends Piece {
     public static Set<Square> getKnightMoves(Square[][] board, Square pos) {
         Set<Square> res = new HashSet<>();
         for (Square moves : KNIGHT_POSSIBLE_MOVES) {
-            Square curr = board[pos.row + moves.row][pos.col + moves.col];
-            if (isSquareInBounds(curr)) {
-                res.add(curr);
+            if (isCoordInBounds(pos.getRow() + moves.getRow(), pos.getCol() + moves.getCol()) && pos.getPieceColor() != board[pos.getRow() + moves.getRow()][pos.getCol() + moves.getCol()].getPieceColor()) {
+                res.add(board[pos.getRow() + moves.getRow()][pos.getCol() + moves.getCol()]);
             }
         }
         return res;
     }
 
+    @Override
+    public Set<Square> getPossibleMoves(Square[][] board, Square pos) {
+        return getKnightMoves(board, pos);
+    }
 }

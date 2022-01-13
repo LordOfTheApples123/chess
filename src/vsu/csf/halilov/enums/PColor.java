@@ -12,4 +12,22 @@ public enum PColor {
             return WHITE;
         } else return null;
     }
+
+    public String toString(){
+        if (this == WHITE) {
+            return "White";
+        }
+        if (this == BLACK) {
+            return "Black";
+        } else return null;
+    }
+
+    public static String to1LetterString( PColor color){
+        if (color == WHITE) {
+            return "W";
+        }
+        if (color == BLACK) {
+            return "B";
+        } else return " ";
+    }
 }

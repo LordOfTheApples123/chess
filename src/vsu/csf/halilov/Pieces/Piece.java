@@ -2,6 +2,7 @@ package vsu.csf.halilov.Pieces;
 
 import vsu.csf.halilov.enums.PColor;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,11 +16,18 @@ public abstract class Piece {
         this.pieceId = pieceId;
     }
 
+    public static boolean isCoordInBounds(int row, int col) {
+        return row>=0 && row < 8 && col >=0 && col<8;
+    }
+
     public PColor getColor() {
         return color;
     }
 
     public String getPieceId() {
+        if(pieceId == null){
+            return "NULL";
+        }
         return pieceId;
     }
 
@@ -45,12 +53,19 @@ public abstract class Piece {
     }
 
     public static void move(Square[][] board, Square piecePos, Square pos) {
-        board[pos.row][pos.col].setPiece(this);
-        board[piecePos.row][piecePos.col].remove();
+        board[pos.row][pos.col].setPiece(piecePos.getPiece());
+        board[piecePos.row][piecePos.col].setPiece(null);
+
     }
+
+
 
     public boolean isMovePossible(Square[][] board, Square piecePos, Square pos) {
         return false;
+    }
+
+    public Set<Square> getPossibleMoves(Square[][] board, Square pos){
+        return new HashSet<>();
     }
 
 

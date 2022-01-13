@@ -19,4 +19,9 @@ public class Queen extends Piece {
     public boolean isMovePossible(Square[][] board, Square piecePos, Square pos) {
         return getQueenMoves(board, piecePos).contains(pos);
     }
+
+    @Override
+    public Set<Square> getPossibleMoves(Square[][] board, Square piecePos) {
+        return getQueenMoves(board, piecePos);
+    }
 }
